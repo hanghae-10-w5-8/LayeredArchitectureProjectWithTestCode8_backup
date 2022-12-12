@@ -1,0 +1,11 @@
+const errorLogger = (error, request, response, next) => {
+    next(error); // errorLogger -> errorHandler
+};
+
+const errorHandler = (error, req, res, next) => {
+    const status = error.status || 400;
+    res.status(status);
+    res.json({ errorMessage: error.message });
+};
+
+module.exports = { errorLogger, errorHandler };
