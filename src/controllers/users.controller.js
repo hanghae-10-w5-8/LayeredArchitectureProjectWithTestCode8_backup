@@ -9,7 +9,6 @@ class UsersController {
     createUser = async (req, res, next) => {
         try {
             const { nickname, password, confirm } = req.body;
-            console.log(req.body);
 
             if (!nickname || !password || !confirm) {
                 throw new InvalidParamsError();
@@ -27,7 +26,24 @@ class UsersController {
         }
     };
 
-    logInUser = async (req, res, next) => {};
+    logInUser = async (req, res, next) => {
+        try {
+            const { nickname, password } = req.body;
+
+            if (!nickname || !password) {
+                throw new InvalidParamsError();
+            }
+
+            const token = await this.#usersService.logInUser({
+                nickname,
+                password,
+            });
+
+            res.status(200).json({ token });
+        } catch (err) {
+            next(ett);
+        }
+    };
 }
 
 module.exports = UsersController;

@@ -20,7 +20,6 @@ class UsersService {
     };
 
     createUser = async ({ nickname, password, confirm }) => {
-        console.log('users.service, createUSer');
         const re_nickname = /^[a-zA-Z0-9]{3,10}$/;
         const re_password = /^[a-zA-Z0-9]{4,30}$/;
         function isRegexValidation(target, regex) {
@@ -28,7 +27,6 @@ class UsersService {
         }
 
         const isExistUser = await this.findUser({ nickname });
-        console.log();
 
         if (isExistUser !== null) {
             throw new ValidationError('중복된 닉네임입니다.', 412);
@@ -58,7 +56,9 @@ class UsersService {
         return user;
     };
 
-    logInUser = async ({}) => {};
+    logInUser = async ({ nickname, password }) => {
+        return console.log(nickname, password);
+    };
 }
 
 module.exports = UsersService;
