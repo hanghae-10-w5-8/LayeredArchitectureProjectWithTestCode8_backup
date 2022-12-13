@@ -28,6 +28,8 @@ class UsersService {
 
         const isExistUser = await this.findUser({ nickname });
 
+        if (isExistUser) {
+        }
         if (isExistUser !== null) {
             throw new ValidationError('중복된 닉네임입니다.', 412);
         } else if (password !== confirm) {
