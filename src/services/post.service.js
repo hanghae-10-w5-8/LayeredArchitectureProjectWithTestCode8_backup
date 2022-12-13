@@ -15,6 +15,23 @@ class PostService {
         });
         return data;
     };
+
+    findAllPost = async () => {
+        const allPost = await this.#postRepository.findAllPost();
+        allPost.sort((a, b) => {
+            return b.createdAt - a.createdAt;
+        });
+
+        return allPost.map((post) => {
+            return {
+                userId: post.userId,
+                title: post.title,
+                content: post.content,
+                createdAt: post.createdAt,
+                updatedAt: post.updatedAt,
+            };
+        });
+    };
 }
 
 module.exports = PostService;

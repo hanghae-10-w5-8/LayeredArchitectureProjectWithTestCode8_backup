@@ -14,15 +14,20 @@ class PostController {
                 throw new InvalidParamsError();
             }
 
-            const data = await this.postService.createPost({
+            const posts = await this.postService.createPost({
                 userId,
                 title,
                 content,
             });
-            res.json({ result: data });
+            res.json({ result: posts });
         } catch (error) {
             next(error);
         }
+    };
+
+    getPosts = async (req, res, next) => {
+        const post = await this.postService.findAllPost();
+        res.json({ result: post });
     };
 }
 

@@ -15,6 +15,11 @@ class PostRepository extends Posts {
         });
         return createPostData;
     };
+
+    findAllPost = async () => {
+        const posts = await Posts.findAll();
+        return posts;
+    };
 }
 
 module.exports = PostRepository;
