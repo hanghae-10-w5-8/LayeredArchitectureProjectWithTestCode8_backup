@@ -1,10 +1,9 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const { createHmac } = require('node:crypto');
 const UsersRepository = require('../repositories/users.repository.js');
 const { ValidationError } = require('../exceptions/index.exception.js');
 const { Users } = require('../models');
-const env = process.env;
+const { hash } = require('../util/auth-encryption.util');
 
 class UsersService {
     constructor() {
@@ -46,13 +45,11 @@ class UsersService {
             );
         }
 
-        const hash = createHmac('sha256', env.CRYPTO_SECRETE_KEY)
-            .update(password)
-            .digest('hex');
+        const hashValue = hash(password);
 
         const user = await this.UsersRepository.createUser({
             nickname,
-            password: hash,
+            password: hashValue,
         });
 
         return user;
