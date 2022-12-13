@@ -15,9 +15,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 // 라우터 등록
-app.get('/test', (req, res) => {
-    res.send('서버 실행 테스트 app.js');
-});
 app.use('/api', routes);
 
 //Error 핸들러

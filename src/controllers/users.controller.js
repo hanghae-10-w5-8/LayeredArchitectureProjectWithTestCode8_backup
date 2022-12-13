@@ -1,7 +1,6 @@
 const UsersService = require('../services/users.service.js');
 const { InvalidParamsError } = require('../exceptions/index.exception.js');
 const usersService = new UsersService();
-console.log(usersService.createUser);
 
 class UsersController {
     #usersService = new UsersService();
@@ -41,7 +40,7 @@ class UsersController {
 
             res.status(200).json({ token });
         } catch (err) {
-            next(ett);
+            next(err);
         }
     };
 }

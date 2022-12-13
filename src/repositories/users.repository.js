@@ -7,6 +7,16 @@ class UsersRepository {
     findUser = async ({ nickname }) => {
         return await this.postsModel.findOne({
             where: { nickname },
+            include: { except: password },
+        });
+    };
+
+    authUser = async ({ nickname, password }) => {
+        return await this.postsModel.findOne({
+            where: {
+                [Op.and]: [{ nickname }, { password }],
+                include: { except: password },
+            },
         });
     };
 

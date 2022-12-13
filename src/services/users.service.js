@@ -28,9 +28,7 @@ class UsersService {
 
         const isExistUser = await this.findUser({ nickname });
 
-        if (isExistUser) {
-        }
-        if (isExistUser !== null) {
+        if (isExistUser.nickname === nickname) {
             throw new ValidationError('중복된 닉네임입니다.', 412);
         } else if (password !== confirm) {
             throw new ValidationError('패스워드가 일치하지 않습니다.', 412);
@@ -59,7 +57,18 @@ class UsersService {
     };
 
     logInUser = async ({ nickname, password }) => {
-        return console.log(nickname, password);
+        const hashValue = hash(password);
+        const user = await this.#usersRepository.authUser({
+            nickname,
+            password: hashValue,
+        });
+
+        if (user === null) {
+            throw new ValidationError(
+                '닉네임 또는 패스워드를 확인해주세요',
+                412
+            );
+        } else if ()
     };
 }
 
