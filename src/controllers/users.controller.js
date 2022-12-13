@@ -33,12 +33,25 @@ class UsersController {
                 throw new InvalidParamsError();
             }
 
-            const token = await this.#usersService.logInUser({
+            const tokens = await this.#usersService.logInUser({
                 nickname,
                 password,
             });
 
-            res.status(200).json({ token });
+            res.cookie(tokens.accessTokenName, `Bearer ${tokens.accessToken}`, {
+                expires: tokens.accessCookieExpiration,
+            });
+            res.cookie(
+                tokens.refreshTokenName,
+                `Bearer ${tokens.refreshToken}`,
+                {
+                    expires: tokens.refreshCookieExpiration,
+                }
+            );
+            res.status(200).json({
+                accessToken: `Bearer[${tokens.accessToken}]`,
+                refreshToken: `Bearer[${tokens.refreshToken}]`,
+            });
         } catch (err) {
             next(err);
         }

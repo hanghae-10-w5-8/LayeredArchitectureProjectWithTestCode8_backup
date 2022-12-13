@@ -1,9 +1,15 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const UsersRepository = require('../repositories/users.repository.js');
-const { ValidationError } = require('../exceptions/index.exception.js');
 const { Users } = require('../models');
+const { ValidationError } = require('../exceptions/index.exception.js');
 const { hash } = require('../util/auth-encryption.util');
+const {
+    tokenObject,
+    createToken,
+    setCookieExpiration,
+} = require('../util/auth-jwtToken.util');
+const env = process.env;
 
 class UsersService {
     #usersRepository;
@@ -63,12 +69,26 @@ class UsersService {
             password: hashValue,
         });
 
-        if (user === null) {
+        if (user === null || !user) {
             throw new ValidationError(
                 '닉네임 또는 패스워드를 확인해주세요',
                 412
             );
-        } else if ()
+        }
+
+        const accessToken = createToken(user.userId, '1h');
+        const refreshToken = createToken('refreshToken', '1d');
+        tokenObject[refreshToken] = user.userId;
+
+        const tokens = {
+            accessToken,
+            accessTokenName: env.ACCESSTOKEN_NAME,
+            accessCookieExpiration: setCookieExpiration(5),
+            refreshToken,
+            refreshTokenName: env.REFRESHTOKEN_NAME,
+            refreshCookieExpiration: setCookieExpiration(48),
+        };
+        return tokens;
     };
 }
 

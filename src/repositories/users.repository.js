@@ -1,4 +1,6 @@
 const { Op } = require('sequelize');
+
+// 회원의  password는 최대한 서버에 노출되지 않도록 처리
 class UsersRepository {
     constructor(PostsModel) {
         this.postsModel = PostsModel;
@@ -7,7 +9,7 @@ class UsersRepository {
     findUser = async ({ nickname }) => {
         return await this.postsModel.findOne({
             where: { nickname },
-            include: { except: password },
+            attributes: { exclude: ['password'] },
         });
     };
 
@@ -15,8 +17,8 @@ class UsersRepository {
         return await this.postsModel.findOne({
             where: {
                 [Op.and]: [{ nickname }, { password }],
-                include: { except: password },
             },
+            attributes: { exclude: ['password'] },
         });
     };
 
