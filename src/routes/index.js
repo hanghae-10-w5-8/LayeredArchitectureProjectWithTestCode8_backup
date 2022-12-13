@@ -6,7 +6,7 @@ const postRouter = require('./post.route.js');
 const usersRouter = require('./users.route.js');
 
 router.use('./likes', [likeRouter]);
-router.use('./posts', [postRouter]);
+router.use('/posts', [postRouter]);
 router.use('./comments', [commentRouter]);
 router.use('./users', [usersRouter]);
 

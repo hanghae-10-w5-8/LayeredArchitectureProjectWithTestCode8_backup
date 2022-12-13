@@ -1,1 +1,20 @@
+const { Users, Posts, Comments } = require('../models');
+const InternalServerError = require('../exceptions/index.exception.js');
+
+class PostRepository extends Posts {
+    constructor() {
+        super();
+    }
+
+    createPost = async ({ userId, title, content }) => {
+        console.log(userId, title, content);
+        const createPostData = await Posts.create({
+            userId,
+            title,
+            content,
+        });
+        return createPostData;
+    };
+}
+
 module.exports = PostRepository;
