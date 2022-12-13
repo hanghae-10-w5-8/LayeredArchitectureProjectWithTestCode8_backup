@@ -6,12 +6,13 @@ const { Users } = require('../models');
 const { hash } = require('../util/auth-encryption.util');
 
 class UsersService {
+    #usersRepository;
     constructor() {
-        this.usersRepository = new UsersRepository(Users);
+        this.#usersRepository = new UsersRepository(Users);
     }
 
     findUser = async ({ nickname }) => {
-        const user = await this.usersRepository.findUser({
+        const user = await this.#usersRepository.findUser({
             nickname,
         });
 
@@ -19,6 +20,7 @@ class UsersService {
     };
 
     createUser = async ({ nickname, password, confirm }) => {
+        console.log('users.service, createUSer');
         const re_nickname = /^[a-zA-Z0-9]{3,10}$/;
         const re_password = /^[a-zA-Z0-9]{4,30}$/;
         function isRegexValidation(target, regex) {
@@ -26,8 +28,9 @@ class UsersService {
         }
 
         const isExistUser = await this.findUser({ nickname });
+        console.log();
 
-        if (isExistUser.length) {
+        if (isExistUser !== null) {
             throw new ValidationError('중복된 닉네임입니다.', 412);
         } else if (password !== confirm) {
             throw new ValidationError('패스워드가 일치하지 않습니다.', 412);
@@ -47,13 +50,15 @@ class UsersService {
 
         const hashValue = hash(password);
 
-        const user = await this.UsersRepository.createUser({
+        const user = await this.#usersRepository.createUser({
             nickname,
             password: hashValue,
         });
 
         return user;
     };
+
+    logInUser = async ({}) => {};
 }
 
 module.exports = UsersService;

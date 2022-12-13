@@ -1,4 +1,5 @@
 const errorLogger = (error, request, response, next) => {
+    console.log(error);
     next(error); // errorLogger -> errorHandler
 };
 

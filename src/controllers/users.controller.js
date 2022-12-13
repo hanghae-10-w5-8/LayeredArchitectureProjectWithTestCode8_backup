@@ -1,20 +1,21 @@
 const UsersService = require('../services/users.service.js');
 const { InvalidParamsError } = require('../exceptions/index.exception.js');
+const usersService = new UsersService();
+console.log(usersService.createUser);
 
 class UsersController {
-    construct() {
-        this.usersService = new UsersService();
-    }
+    #usersService = new UsersService();
 
     createUser = async (req, res, next) => {
         try {
             const { nickname, password, confirm } = req.body;
+            console.log(req.body);
 
             if (!nickname || !password || !confirm) {
                 throw new InvalidParamsError();
             }
 
-            await this.usersService.createUser({
+            await this.#usersService.createUser({
                 nickname,
                 password,
                 confirm,
@@ -25,6 +26,8 @@ class UsersController {
             next(err);
         }
     };
+
+    logInUser = async (req, res, next) => {};
 }
 
 module.exports = UsersController;
